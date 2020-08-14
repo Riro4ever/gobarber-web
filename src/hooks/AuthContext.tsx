@@ -12,19 +12,19 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-    user: object;
-    signIn(credentials: SignInCredentials): Promise<void>;
-    signOut(): void;
+  user: object;
+  signIn(credentials: SignInCredentials): Promise<void>;
+  signOut(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-const AuthProvider: React.FC =({ children}) => {
+const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@gobarber:token');
     const user = localStorage.getItem('@gobarber:user');
 
-    if(token && user) {
+    if (token && user) {
       return { token, user: JSON.parse(user) };
     }
 
@@ -35,8 +35,8 @@ const AuthProvider: React.FC =({ children}) => {
     const response = await api.post('sessions', {
       email,
       password,
-    })
-    
+    });
+
     const { token, user } = response.data;
 
     localStorage.setItem('@gobarber:token', token);
@@ -57,12 +57,12 @@ const AuthProvider: React.FC =({ children}) => {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 function useAuth(): AuthContextData {
   const context = useContext(AuthContext);
 
-  if(!context) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
 
